@@ -1,34 +1,35 @@
-# Professional Marketing Agency – Landing Page & n8n Integration
+# Professional Marketing Agency Landing Page
 
-This is a simple, modern landing page for **Professional Marketing Agency** with a contact form wired into an **n8n** webhook for automation and AI-powered replies.
+A modern landing page project for a marketing agency with integrated n8n automation for handling contact form submissions.
 
-## How to Run the Frontend
+---
 
-You can either:
+## Project Overview
 
-- **Option 1 – Open directly**:  
-  Simply open `index.html` in your browser (double-click the file).
+This project combines a sleek, responsive landing page with automated workflow management. The contact form seamlessly integrates with n8n to process inquiries, generate AI-powered responses, and log data—all without manual intervention.
 
-- **Option 2 – Serve locally (recommended for CORS testing)**:
+## What's Included
 
-  ```bash
-  npm install -g serve
-  serve .
-  ```
+- **Landing Page** – Clean hero section, services showcase, and contact form
+- **Responsive Design** – Works smoothly on desktop and mobile
+- **n8n Integration** – Automated form processing and responses
+- **Form Validation** – Client-side validation for better UX
 
-  Or with the included script:
+## Getting Started
 
-  ```bash
-  npm install
-  npm run start
-  ```
+### Option 1: Open Directly
+Just double-click `index.html` and you're good to go.
 
-This serves the site at `http://localhost:3000` (or similar), depending on your `serve` configuration.
+### Option 2: Run Locally
+```bash
+npm install
+npm run start
+```
+The site will run on `http://localhost:3000`
 
-## Contact Form → n8n Webhook
+## Contact Form Setup
 
-- **Webhook URL**: `http://localhost:5678/webhook/api-communication`
-- **Payload format (JSON)**:
+When someone fills out the contact form, it sends a POST request to your n8n webhook with this structure:
 
 ```json
 {
@@ -38,31 +39,26 @@ This serves the site at `http://localhost:3000` (or similar), depending on your 
 }
 ```
 
-The frontend:
+**Webhook Endpoint**: `http://localhost:5678/webhook/api-communication`
 
-- Validates that **name**, **email**, and **message** are filled in.
-- Ensures the email **contains "@"** and loosely validates the format.
-- Sends a `POST` request with `Content-Type: application/json` to the webhook.
-- Shows a success or error status message to the user.
+The form validates that all fields are filled and the email format is valid before sending.
 
-## Suggested n8n Workflow (for your tryout presentation)
+## n8n Workflow
 
-1. **Webhook Trigger**  
-   Receives the `name`, `email`, and `message` from the contact form.
-2. **Function / Set Node**  
-   Cleans and formats the data (e.g., trims text, normalizes casing).
-3. **AI Node (OpenAI / other LLM)**  
-   Generates a professional, friendly confirmation email that:
-   - Acknowledges receipt of the inquiry  
-   - Thanks the user for reaching out  
-   - States that the team will follow up soon  
-4. **Email Node (or Messaging Node)**  
-   Sends the AI-generated response to the user’s `email` or your chosen messaging platform.
+The workflow automates everything after form submission:
 
-You can record a short Loom video walking through:
+1. **Webhook Trigger** – Captures the form data
+2. **Process Data** – Cleans and formats the information
+3. **Generate Response** – AI creates a professional acknowledgment message
+4. **Send Email** – Automatically emails the user their confirmation
+5. **Log Data** – Stores the inquiry in your database
 
-- The landing page (hero, services, contact form).
-- The n8n workflow nodes and how data flows between them.
-- A live demo: submit the form → show the n8n execution → show the AI-generated reply in the user’s inbox or messaging app.
+## Requirements
 
+- n8n running locally on `localhost:5678`
+- Modern web browser
+- Node.js (if running with `npm`)
 
+---
+
+That's it! Deploy, submit a form, and watch the automation work.

@@ -143,18 +143,44 @@ async function handleSubmit(event) {
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
+    let data = null;
+    try {
+      data = await response.json();
+    } catch (e) {
+      // If the response is not valid JSON, keep data as null
     }
 
+    if (!response.ok) {
+      // Handle known error responses from the webhook
+      if (response.status === 400 || response.status === 429) {
+        const backendMessage =
+          data && typeof data.message === "string" && data.message.trim().length > 0
+            ? data.message
+            : response.status === 400
+            ? "Please provide a valid name, email address, and a message with sufficient details."
+            : "Too many requests. Please wait a few minutes before submitting again.";
+
+        setFormStatus(backendMessage, "error");
+      } else {
+        setFormStatus(
+          "We couldn’t send your message right now. Please check that your automation (n8n) server is running on localhost:5678 and try again.",
+          "error"
+        );
+      }
+      return;
+    }
+
+    // Success (HTTP 200) – use backend message if present
     nameInput.value = "";
     emailInput.value = "";
     messageInput.value = "";
 
-    setFormStatus(
-      "Thank you for reaching out. We’ve received your inquiry and our AI assistant has sent you a confirmation email.",
-      "success"
-    );
+    const successMessage =
+      data && typeof data.message === "string" && data.message.trim().length > 0
+        ? data.message
+        : "Thank you for reaching out. We’ve received your inquiry and our AI assistant has sent you a confirmation email.";
+
+    setFormStatus(successMessage, "success");
   } catch (error) {
     console.error("Error submitting form:", error);
     setFormStatus(
