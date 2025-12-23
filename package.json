@@ -1,0 +1,19 @@
+{
+  "name": "frontend_ai_automation_agency",
+  "version": "1.0.0",
+  "description": "Simple, modern landing page for Professional Marketing Agency with n8n webhook integration.",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "marketing",
+    "landing-page",
+    "automation",
+    "n8n",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
+
