@@ -183,10 +183,24 @@ async function handleSubmit(event) {
     setFormStatus(successMessage, "success");
   } catch (error) {
     console.error("Error submitting form:", error);
-    setFormStatus(
-      "We couldn’t send your message right now. Please check that your automation (n8n) server is running on localhost:5678 and try again.",
-      "error"
-    );
+    // Network / unreachable webhook handling
+    const isNetworkError =
+      error instanceof TypeError ||
+      (typeof error.message === "string" &&
+        (error.message.toLowerCase().includes("failed to fetch") ||
+          error.message.toLowerCase().includes("networkerror")));
+
+    if (isNetworkError) {
+      setFormStatus(
+        "We couldn’t reach the automation webhook. Please try again later.",
+        "error"
+      );
+    } else {
+      setFormStatus(
+        "We couldn’t send your message right now due to an unexpected error. Please try again shortly.",
+        "error"
+      );
+    }
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Send Message";
